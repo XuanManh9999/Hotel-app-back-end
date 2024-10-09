@@ -1,5 +1,6 @@
 package com.toilamanh.toilamanh.utils;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,13 +12,14 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Date;
+import java.util.function.Function;
 
 @Service
 public class JWTUtils {
-    @Value("${my-jwt.secreteString}")
-    private String secreteString;
+    @Value("${jwt.secrete}")
+    private String secreteString = "YFBRaoJ7LxB2VB10cGWI5MIua1/xHvnpcOXDLIephhzpmpS2qPb+ijVeiCVhT0dK";
     private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 24;//for 7 days
-    private final  SecretKey Key;
+    private final SecretKey Key;
     public JWTUtils () {
         byte[] keyBytes = Base64.getDecoder().decode(secreteString.getBytes(StandardCharsets.UTF_8));
         this.Key = new SecretKeySpec(keyBytes, "HmacSHA256");
@@ -32,6 +34,18 @@ public class JWTUtils {
     }
 
     public String extractUsername (String token) {
-        return "";
+        return extractClaims(token, Claims::getSubject);
+    }
+
+    private <T> T extractClaims (String token, Function<Claims, T> claimsResolver) {
+        return claimsResolver.apply(Jwts.parser().verifyWith(Key).build().parseSignedClaims(token).getPayload());
+    }
+
+    public boolean isValidToken(String token, UserDetails userDetails) {
+        final String username = extractUsername(token);
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+    private boolean isTokenExpired (String token) {
+        return extractClaims(token, Claims::getExpiration).before(new Date());
     }
 }
