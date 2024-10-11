@@ -4,6 +4,7 @@ import com.toilamanh.toilamanh.dto.LoginRequest;
 import com.toilamanh.toilamanh.dto.Response;
 import com.toilamanh.toilamanh.dto.UserDTO;
 import com.toilamanh.toilamanh.entity.User;
+import com.toilamanh.toilamanh.enu.Http;
 import com.toilamanh.toilamanh.exception.OurException;
 import com.toilamanh.toilamanh.repository.UserRepository;
 import com.toilamanh.toilamanh.service.interfac.IUserService;
@@ -19,6 +20,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+
 import java.util.List;
 
 @Service
@@ -26,7 +28,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserService implements IUserService {
     UserRepository userRepository;
-    ObjectFactory<PasswordEncoder> passwordEncoderFactory;
+    ObjectFactory <PasswordEncoder> passwordEncoderFactory;
     ObjectFactory <JWTUtils> jwtUtilsFactory;
     ObjectFactory<AuthenticationManager> authenticationManagerFactory;
     @Override
@@ -44,15 +46,15 @@ public class UserService implements IUserService {
             User savedUser = userRepository.save(user);
             UserDTO userDTO = Utils.mapUserEntitytoUserDTO(savedUser);
 
-            response.setStatusCode(HttpStatus.CREATED.value());
+            response.setStatusCode(Http.CREATE_SUCCESS_USER.getStatus());
             response.setUser(userDTO);
-            response.setMessage(HttpStatus.CREATED.getReasonPhrase());
+            response.setMessage(Http.CREATE_SUCCESS_USER.getMessage());
 
         }catch (OurException e) {
             response.setStatusCode(HttpStatus.BAD_REQUEST.value());
             response.setMessage(e.getMessage());
         } catch (Exception e){
-            response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            response.setStatusCode(Http.CREATE_ERROR_SERVER.getStatus());
             response.setMessage("Error Occurred During User Registration: " + e.getMessage());
         }
         return response;
@@ -64,14 +66,12 @@ public class UserService implements IUserService {
         try {
             authenticationManagerFactory.getObject().authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
             var user = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new OurException(loginRequest.getEmail() + " Not Found"));
-
             var token = jwtUtilsFactory.getObject().generateToken(user);
             response.setStatusCode(HttpStatus.OK.value());
             response.setToken(token);
             response.setRole(user.getRole());
             response.setExpirationTime("7 Days");
             response.setMessage("successfully logged in");
-
         }catch (OurException e) {
             response.setStatusCode(HttpStatus.BAD_REQUEST.value());
             response.setMessage(e.getMessage());
