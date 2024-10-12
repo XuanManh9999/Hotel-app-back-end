@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class Utils {
     public static final String ALPHANUMERIC_STRING="ADCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     public static final SecureRandom secureRandom = new SecureRandom();
-    public static String generateAlphaNumericString(int length) {
+    public static String generateRandomConfirmationCode(int length) {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < length; i++) {
             int number = secureRandom.nextInt(ALPHANUMERIC_STRING.length());
