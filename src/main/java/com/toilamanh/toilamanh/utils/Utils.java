@@ -70,12 +70,7 @@ public class Utils {
     }
 
    public static UserDTO mapUserEntityToUserDTOPlusUserBookingsAndRoom(User user) {
-        UserDTO userDTO = new UserDTO();
-       userDTO.setId(user.getId());
-       userDTO.setName(user.getName());
-       userDTO.setEmail(user.getEmail());
-       userDTO.setPhoneNumber(user.getPhoneNumber());
-       userDTO.setRole(user.getRole());
+       UserDTO userDTO = mapUserEntitytoUserDTO(user);
        if (!user.getBookings().isEmpty()) {
            userDTO.setBookings(user.getBookings().stream().map(booking -> mapBookingEntityToBookingDTOPlusBookedRoom(booking, false)).collect(Collectors.toList()));
        }
