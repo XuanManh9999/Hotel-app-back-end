@@ -1,10 +1,12 @@
 package com.toilamanh.toilamanh.security;
 
+import com.toilamanh.toilamanh.service.CustomUserDetailsService;
 import com.toilamanh.toilamanh.utils.JWTUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.CachingUserDetailsService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
@@ -20,9 +22,9 @@ import java.io.IOException;
 
 public class JWTAuthFilter extends OncePerRequestFilter {
     private final JWTUtils jwtUtils;
-
-    private  CachingUserDetailsService cachingUserDetailsService;
-    public JWTAuthFilter(JWTUtils jwtUtils ) {
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService;
+    public JWTAuthFilter(JWTUtils jwtUtils) {
         this.jwtUtils = jwtUtils;
     }
 
@@ -38,7 +40,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
         jwtToken = authorizationHeader.substring(7);
         userEmail = jwtUtils.extractUsername(jwtToken);
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = cachingUserDetailsService.loadUserByUsername(userEmail);
+            UserDetails userDetails = customUserDetailsService.loadUserByUsername(userEmail);
             if (jwtUtils.isValidToken(jwtToken, userDetails)) {
                 SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
