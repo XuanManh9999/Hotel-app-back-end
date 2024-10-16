@@ -38,18 +38,19 @@ public class Booking {
     private Room room;
 
 
-    // dinh nghia lay ra tong so nguoi
     public void calculateTotalNumOfGuest() {
-        this.totalNumOfGuest = this.numOfAdults + this.numOfChildren;
+        this.totalNumOfGuest = (this.numOfAdults != null ? this.numOfAdults : 0) +
+                (this.numOfChildren != null ? this.numOfChildren : 0);
     }
 
-    public void setNumOfChildren(@Min(value = 0, message = "Number of children must not be less that 0") Integer numOfChildren) {
-        this.numOfChildren = numOfChildren;
+
+    public void setNumOfChildren(@Min(value = 0, message = "Number of children must not be less than 0") Integer numOfChildren) {
+        this.numOfChildren = (numOfChildren != null) ? numOfChildren : 0;
         calculateTotalNumOfGuest();
     }
 
-    public void setNumOfAdults(@Min(value = 1, message = "Number of adults must not be less that 1") Integer numOfAdults) {
-        this.numOfAdults = numOfAdults;
+    public void setNumOfAdults(@Min(value = 1, message = "Number of adults must not be less than 1") Integer numOfAdults) {
+        this.numOfAdults = (numOfAdults != null) ? numOfAdults : 1;  // Đặt mặc định là 1 vì giá trị min là 1
         calculateTotalNumOfGuest();
     }
 

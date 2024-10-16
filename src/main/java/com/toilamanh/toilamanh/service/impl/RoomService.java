@@ -86,7 +86,7 @@ public class RoomService implements IRoomService {
         }
         return response;
     }
-
+    //roomId, roomType, roomPrice, photo, roomDescription
     @Override
     public Response updateRoom(Long roomId, String roomType, BigDecimal roomPrice, String photo, String description) {
         Response response = new Response();

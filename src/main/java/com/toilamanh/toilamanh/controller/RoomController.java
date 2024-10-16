@@ -91,12 +91,12 @@ public class RoomController {
 
     @PutMapping("/update/{roomId}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Response> updateRoom(@PathVariable Long id,
+    public ResponseEntity<Response> updateRoom(@PathVariable Long roomId,
                                                @RequestParam(value = "photo", required = false) String photo,
                                                @RequestParam(value = "roomType", required = false) String roomType,
                                                @RequestParam(value = "roomPrice", required = false) BigDecimal roomPrice,
                                                @RequestParam(value = "roomDescription", required = false) String roomDescription) {
-        Response response = roomService.updateRoom(id, roomType, roomPrice, photo, roomDescription);
+        Response response = roomService.updateRoom(roomId, roomType, roomPrice, photo, roomDescription);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
