@@ -15,7 +15,6 @@ import java.util.function.Function;
 
 @Service
 public class JWTUtils {
-    @Value("${jwt.secrete}")
     private String secreteString = "YFBRaoJ7LxB2VB10cGWI5MIua1/xHvnpcOXDLIephhzpmpS2qPb+ijVeiCVhT0dK";
     private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 24;//for 7 days
     private final SecretKey Key;

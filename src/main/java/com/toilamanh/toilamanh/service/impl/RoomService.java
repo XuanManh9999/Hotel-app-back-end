@@ -4,7 +4,6 @@ import com.toilamanh.toilamanh.dto.Response;
 import com.toilamanh.toilamanh.dto.RoomDTO;
 import com.toilamanh.toilamanh.entity.Room;
 import com.toilamanh.toilamanh.exception.OurException;
-import com.toilamanh.toilamanh.repository.BookingRepository;
 import com.toilamanh.toilamanh.repository.RoomRepository;
 import com.toilamanh.toilamanh.service.interfac.IRoomService;
 import com.toilamanh.toilamanh.utils.Utils;
@@ -25,7 +24,6 @@ import java.util.List;
 
 public class RoomService implements IRoomService {
     RoomRepository roomRepository;
-    BookingRepository bookingRepository;
     @Override
     public Response addnewRoom(String photo, String roomType, BigDecimal roomPrice, String description) {
         Response response = new Response();

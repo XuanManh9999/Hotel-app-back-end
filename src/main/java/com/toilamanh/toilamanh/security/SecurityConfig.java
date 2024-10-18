@@ -48,6 +48,7 @@ public class SecurityConfig {
         return daoAuthenticationProvider;
     }
 
+    // vi minh ko co ma nguon nen phai viet nhu the nay
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

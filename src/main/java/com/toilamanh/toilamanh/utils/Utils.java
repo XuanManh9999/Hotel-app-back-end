@@ -55,12 +55,7 @@ public class Utils {
     }
 
     public static RoomDTO mapRoomEntityToRoomDTOPlusBookings(Room room) {
-        RoomDTO roomDTO = new RoomDTO();
-        roomDTO.setId(room.getId());
-        roomDTO.setRoomType(room.getRoomType());
-        roomDTO.setRoomPrice(room.getRoomPrice());
-        roomDTO.setRoomPhotoUrl(room.getRoomPhotoUrl());
-//        roomDTO.setRoomDescription(room.getRoomDescription());
+        RoomDTO roomDTO = mapRoomEntityToRoomDTO(room);
 
         if (room.getBookings() != null) {
             roomDTO.setBookings(room.getBookings().stream().map(Utils::mapBookingEntityToBookingDTO).collect(Collectors.toList()));
